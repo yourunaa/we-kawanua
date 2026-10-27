@@ -1,0 +1,636 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>we kawanua news - Portal Berita Sulawesi Utara Terdepan</title>
+  
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- FontAwesome Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Montserrat:wght@800;900&display=swap" rel="stylesheet">
+  
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            detikBlue: '#0073b7',
+            detikDarkBlue: '#005b92',
+            detikLightBlue: '#eef6fc',
+            detikRed: '#e11d48'
+          },
+          fontFamily: {
+            sans: ['Inter', 'sans-serif'],
+            brand: ['Montserrat', 'sans-serif']
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    .no-scrollbar::-webkit-scrollbar { display: none; }
+    .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+  </style>
+</head>
+<body class="bg-gray-100 text-gray-800 font-sans antialiased selection:bg-detikBlue selection:text-white">
+
+  <!-- ==================== 1. TOP UTILITY BAR ==================== -->
+  <header class="bg-white border-b border-gray-200 sticky top-0 z-40 shadow-sm">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 h-14 flex items-center justify-between gap-4">
+      
+      <!-- Brand Logo Mini -->
+      <a href="#" onclick="filterCategory('all')" class="inline-flex items-baseline gap-1 font-brand">
+        <span class="text-2xl font-black text-detikBlue tracking-tight">we</span>
+        <span class="text-2xl font-black text-detikRed tracking-tight">kawanua</span>
+        <span class="text-xs font-bold text-gray-700 tracking-normal ml-0.5">news</span>
+      </a>
+
+      <!-- Center: Search Bar -->
+      <div class="flex-1 max-w-xl relative">
+        <div class="relative flex items-center">
+          <input type="text" id="searchInput" onkeyup="handleSearch(event)" placeholder="Cari berita di we kawanua news..." 
+            class="w-full py-1.5 pl-4 pr-10 text-xs sm:text-sm rounded-full border border-gray-300 focus:outline-none focus:border-detikBlue focus:ring-1 focus:ring-detikBlue transition">
+          <button onclick="executeSearch()" class="absolute right-1 w-7 h-7 bg-detikBlue text-white rounded-full flex items-center justify-center hover:bg-detikDarkBlue transition">
+            <i class="fa-solid fa-magnifying-glass text-xs"></i>
+          </button>
+        </div>
+      </div>
+
+      <!-- Right: Bookmark Icon Only -->
+      <div class="flex items-center">
+        <button onclick="openBookmarksModal()" class="relative p-2 text-gray-600 hover:text-detikBlue transition" title="Berita Tersimpan">
+          <i class="fa-regular fa-bookmark text-lg sm:text-xl"></i>
+          <span id="bookmarkBadge" class="hidden absolute -top-1 -right-1 bg-detikRed text-white text-[10px] font-bold rounded-full w-4 h-4 flex items-center justify-center">0</span>
+        </button>
+      </div>
+
+    </div>
+  </header>
+
+  <!-- ==================== 2. MAIN CONTAINER ==================== -->
+  <div class="max-w-7xl mx-auto px-3 sm:px-6 py-4">
+
+    <!-- BRAND LOGO HEADER -->
+    <div class="py-3 flex flex-col md:flex-row md:items-end justify-between border-b border-gray-200 mb-4">
+      <div>
+        <a href="#" onclick="filterCategory('all')" class="inline-flex items-baseline gap-1 font-brand">
+          <span class="text-4xl sm:text-5xl font-black text-detikBlue tracking-tight">we</span>
+          <span class="text-4xl sm:text-5xl font-black text-detikRed tracking-tight">kawanua</span>
+          <span class="text-xl sm:text-2xl font-bold text-gray-700 tracking-normal ml-1">news</span>
+        </a>
+        <p class="text-xs text-gray-500 font-medium tracking-wide">Torang Pe Berita Terdepan & Terpercaya di Sulawesi Utara</p>
+      </div>
+      <div class="text-right hidden md:block text-xs text-gray-500">
+        <p class="font-semibold text-gray-700">Selasa, 27 Oktober 2026</p>
+        <p class="text-detikBlue font-medium"><i class="fa-solid fa-location-dot mr-1"></i> Sulawesi Utara (WITA)</p>
+      </div>
+    </div>
+
+    <!-- PRIMARY NAV BAR (HOME ➔ INTERNASIONAL ➔ NASIONAL ➔ INFO SULUT ➔ HUKUM & KRIMINAL ➔ TOKOH PUBLIK) -->
+    <nav class="bg-detikBlue text-white rounded-lg shadow-md mb-6">
+      <div class="flex items-center overflow-x-auto no-scrollbar py-2.5 px-4 text-xs sm:text-sm font-bold whitespace-nowrap gap-4 sm:gap-6">
+        <button onclick="filterCategory('all')" class="nav-item active flex items-center gap-1.5 hover:text-amber-300 transition px-3 py-1 rounded bg-detikDarkBlue">
+          <i class="fa-solid fa-house"></i> Home
+        </button>
+        <button onclick="filterCategory('Internasional')" class="nav-item hover:text-amber-300 transition flex items-center gap-2 text-sm sm:text-base">
+          <i class="fa-solid fa-globe text-amber-300"></i> Internasional
+        </button>
+        <button onclick="filterCategory('Nasional')" class="nav-item hover:text-amber-300 transition flex items-center gap-2 text-sm sm:text-base">
+          <i class="fa-solid fa-flag text-amber-300"></i> Nasional
+        </button>
+        <button onclick="filterCategory('Info Sulut')" class="nav-item hover:text-amber-300 transition flex items-center gap-2 text-sm sm:text-base">
+          <i class="fa-solid fa-map-location-dot text-amber-300"></i> Info Sulut
+        </button>
+        <button onclick="filterCategory('Hukum & Kriminal')" class="nav-item hover:text-amber-300 transition flex items-center gap-2 text-sm sm:text-base">
+          <i class="fa-solid fa-scale-balanced text-amber-300"></i> Hukum & Kriminal
+        </button>
+        <button onclick="filterCategory('Tokoh Publik')" class="nav-item hover:text-amber-300 transition flex items-center gap-2 text-sm sm:text-base">
+          <i class="fa-solid fa-user-tie text-amber-300"></i> Tokoh Publik
+        </button>
+      </div>
+    </nav>
+
+    <!-- ==================== 3. CONTENT GRID ==================== -->
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+
+      <!-- MAIN CONTENT (8 COLS) -->
+      <main class="lg:col-span-8">
+        
+        <!-- SEARCH / FILTER STATUS -->
+        <div id="filterStatus" class="hidden mb-4 p-3 bg-detikLightBlue border border-detikBlue/30 rounded-lg flex items-center justify-between">
+          <p class="text-xs sm:text-sm text-detikDarkBlue font-medium">
+            Kategori Terpilih: <span id="filterKeyword" class="font-bold text-detikRed"></span>
+          </p>
+          <button onclick="filterCategory('all')" class="text-xs text-detikBlue font-semibold underline hover:text-detikRed">Tampilkan Semua Berita</button>
+        </div>
+
+        <!-- HERO FEATURED ARTICLE -->
+        <article id="heroArticle" class="bg-white rounded-lg shadow border border-gray-200 overflow-hidden mb-6 hover:shadow-lg transition cursor-pointer" onclick="openArticleModal(heroData.id)">
+          <div class="relative h-64 sm:h-96 w-full">
+            <img id="heroImage" src="https://images.unsplash.com/photo-1541872703-74c5e44368f9?auto=format&fit=crop&w=1200&q=80" alt="Headline Berita" class="w-full h-full object-cover">
+            <div class="absolute inset-0 bg-gradient-to-t from-black/90 via-black/40 to-transparent flex flex-col justify-end p-4 sm:p-6 text-white">
+              <span id="heroCategory" class="inline-block bg-detikRed text-white text-[11px] font-bold uppercase tracking-wider px-2.5 py-1 rounded w-max mb-2">HUKUM & KRIMINAL • BITUNG</span>
+              <h1 id="heroTitle" class="text-xl sm:text-3xl font-extrabold leading-tight hover:text-amber-300 transition">Polda Sulut Bongkar Jaringan Penyelundupan Barang Mewah Berkelit Melalui Pelabuhan Bitung</h1>
+              <div class="flex items-center text-xs text-gray-300 gap-4 mt-3">
+                <span id="heroAuthor"><i class="fa-regular fa-user mr-1"></i> Tim Redaksi</span>
+                <span id="heroDate"><i class="fa-regular fa-clock mr-1"></i> 15 Menit lalu</span>
+              </div>
+            </div>
+          </div>
+        </article>
+
+        <!-- LATEST NEWS LIST SECTION -->
+        <div class="bg-white rounded-lg shadow border border-gray-200 p-4 mb-6">
+          <div class="flex items-center justify-between border-b border-gray-200 pb-3 mb-4">
+            <h3 class="text-lg font-bold text-detikBlue flex items-center gap-2">
+              <span class="w-2.5 h-6 bg-detikRed rounded-sm inline-block"></span>
+              Berita Terbaru we kawanua news
+            </h3>
+            <span class="text-xs text-gray-500 font-medium">Klik artikel untuk membaca</span>
+          </div>
+
+          <!-- CONTAINER DAFTAR BERITA -->
+          <div id="newsContainer" class="space-y-4">
+            <!-- Rendered via JS -->
+          </div>
+        </div>
+
+      </main>
+
+      <!-- SIDEBAR (4 COLS) -->
+      <aside class="lg:col-span-4 space-y-6">
+
+        <!-- TERPOPULER -->
+        <div class="bg-white rounded-lg shadow border border-gray-200 p-4">
+          <h3 class="text-base font-bold text-gray-900 border-b-2 border-detikBlue pb-2 mb-4 flex items-center gap-2">
+            <i class="fa-solid fa-fire text-detikRed"></i>
+            BERITA TERPOPULER
+          </h3>
+          <div id="popularNewsContainer" class="space-y-4">
+            <!-- Rendered via JS -->
+          </div>
+        </div>
+
+        <!-- PRAKIRAAN CUACA SULUT -->
+        <div class="bg-gradient-to-br from-sky-500 to-blue-700 rounded-lg shadow text-white p-4">
+          <div class="flex items-center justify-between border-b border-white/20 pb-2 mb-3">
+            <h4 class="font-bold text-sm flex items-center gap-1.5">
+              <i class="fa-solid fa-cloud-sun text-amber-300"></i> Prakiraan Cuaca Sulut
+            </h4>
+            <span class="text-[10px] bg-white/20 px-2 py-0.5 rounded">BMKG Sulut</span>
+          </div>
+          <div class="grid grid-cols-2 gap-2 text-center">
+            <div class="bg-white/10 p-2 rounded backdrop-blur-sm">
+              <p class="text-xs text-sky-100">Manado</p>
+              <i class="fa-solid fa-sun text-amber-300 text-xl my-1"></i>
+              <p class="font-bold text-sm">31°C</p>
+            </div>
+            <div class="bg-white/10 p-2 rounded backdrop-blur-sm">
+              <p class="text-xs text-sky-100">Tomohon</p>
+              <i class="fa-solid fa-cloud-rain text-sky-200 text-xl my-1"></i>
+              <p class="font-bold text-sm">24°C</p>
+            </div>
+            <div class="bg-white/10 p-2 rounded backdrop-blur-sm">
+              <p class="text-xs text-sky-100">Bitung</p>
+              <i class="fa-solid fa-cloud-sun text-amber-300 text-xl my-1"></i>
+              <p class="font-bold text-sm">30°C</p>
+            </div>
+            <div class="bg-white/10 p-2 rounded backdrop-blur-sm">
+              <p class="text-xs text-sky-100">Kotamobagu</p>
+              <i class="fa-solid fa-cloud text-sky-100 text-xl my-1"></i>
+              <p class="font-bold text-sm">27°C</p>
+            </div>
+          </div>
+        </div>
+
+      </aside>
+    </div>
+
+  </div>
+
+  <!-- FOOTER -->
+  <footer class="bg-gray-900 text-white mt-12 border-t-4 border-detikBlue">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 py-8">
+      <div class="flex flex-col md:flex-row justify-between items-center gap-4 text-center md:text-left">
+        <div>
+          <a href="#" class="inline-flex items-baseline gap-1 font-brand">
+            <span class="text-3xl font-black text-white">we</span>
+            <span class="text-3xl font-black text-detikRed">kawanua</span>
+            <span class="text-xl font-bold text-gray-400">news</span>
+          </a>
+          <p class="text-xs text-gray-400 mt-1">Sajian berita terkini Sulawesi Utara, Internasional, Nasional, Info Sulut, Hukum, dan Tokoh Publik.</p>
+        </div>
+        <div class="text-xs text-gray-500">
+          &copy; 2026 <strong>we kawanua news</strong>. Hak Cipta Dilindungi.
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- MODAL BACA BERITA DETAIL -->
+  <div id="articleModal" class="hidden fixed inset-0 z-50 bg-black/70 backdrop-blur-sm overflow-y-auto p-3 sm:p-6 flex justify-center">
+    <div class="bg-white rounded-xl shadow-2xl max-w-3xl w-full my-auto overflow-hidden relative border border-gray-200">
+      <button onclick="closeArticleModal()" class="absolute top-3 right-3 z-10 bg-black/60 hover:bg-black text-white w-9 h-9 rounded-full flex items-center justify-center transition">
+        <i class="fa-solid fa-xmark text-lg"></i>
+      </button>
+
+      <div class="max-h-[85vh] overflow-y-auto p-4 sm:p-8">
+        <span id="modalCategory" class="inline-block bg-detikRed text-white text-xs font-bold px-2.5 py-1 rounded uppercase tracking-wider mb-2">HUKUM & KRIMINAL</span>
+        <h1 id="modalTitle" class="text-xl sm:text-3xl font-extrabold text-gray-900 leading-snug mb-3">Judul Berita Detail</h1>
+        
+        <div class="flex items-center justify-between border-b border-gray-200 pb-3 mb-4 text-xs text-gray-500">
+          <div class="flex items-center gap-2">
+            <span id="modalAuthor" class="font-semibold text-gray-700">Tim Redaksi</span>
+            <span>•</span>
+            <span id="modalDate">Selasa, 27 Okt 2026</span>
+          </div>
+        </div>
+
+        <img id="modalImage" src="" alt="Detail Image" class="w-full h-64 sm:h-96 object-cover rounded-lg mb-4">
+        
+        <div id="modalBody" class="prose max-w-none text-gray-800 text-sm sm:text-base leading-relaxed space-y-4">
+          <!-- Text berita inserted here -->
+        </div>
+
+        <!-- Komentar -->
+        <div class="mt-8 border-t border-gray-200 pt-6">
+          <h3 class="font-bold text-base text-gray-900 mb-3 flex items-center gap-2">
+            <i class="fa-regular fa-comments text-detikBlue"></i> Komentar Pembaca (<span id="modalCommentCount">0</span>)
+          </h3>
+          <div class="flex gap-2 mb-4">
+            <input type="text" id="commentInput" placeholder="Tulis komentar Anda..." class="flex-1 border border-gray-300 rounded-lg px-3 py-2 text-xs sm:text-sm focus:outline-none focus:border-detikBlue">
+            <button onclick="addComment()" class="bg-detikBlue hover:bg-detikDarkBlue text-white font-bold px-4 py-2 rounded-lg text-xs transition">Kirim</button>
+          </div>
+          <div id="modalCommentsList" class="space-y-3"></div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <!-- BOOKMARKS MODAL -->
+  <div id="bookmarksModal" class="hidden fixed inset-0 z-50 bg-black/60 backdrop-blur-sm flex justify-center items-center p-4">
+    <div class="bg-white rounded-xl shadow-xl max-w-lg w-full p-6 relative">
+      <button onclick="closeBookmarksModal()" class="absolute top-3 right-3 text-gray-500 hover:text-black">
+        <i class="fa-solid fa-xmark text-lg"></i>
+      </button>
+      <h3 class="text-lg font-bold text-detikBlue mb-4 flex items-center gap-2">
+        <i class="fa-solid fa-bookmark text-detikRed"></i> Berita Tersimpan Anda
+      </h3>
+      <div id="bookmarksList" class="max-h-80 overflow-y-auto space-y-3"></div>
+    </div>
+  </div>
+
+  <!-- TOAST NOTIFICATION -->
+  <div id="toast" class="hidden fixed bottom-5 right-5 z-50 bg-gray-900 text-white px-4 py-2.5 rounded-lg shadow-lg text-xs flex items-center gap-2 border border-gray-700">
+    <i class="fa-solid fa-circle-info text-detikBlue"></i>
+    <span id="toastMsg">Notifikasi</span>
+  </div>
+
+  <!-- JAVASCRIPT LOGIC -->
+  <script>
+    // DATASET BERITA INTERAKTIF WE KAWANUA NEWS
+    const newsData = [
+      {
+        id: 1,
+        title: "Polda Sulut Bongkar Jaringan Penyelundupan Barang Mewah Senilai Miliaran Rupiah di Pelabuhan Bitung",
+        category: "Hukum & Kriminal",
+        region: "Bitung",
+        author: "Karel Mamahit",
+        date: "27 Okt 2026 • 10:15 WITA",
+        image: "https://images.unsplash.com/photo-1541872703-74c5e44368f9?auto=format&fit=crop&w=800&q=80",
+        excerpt: "Tim Ditreskrimsus Polda Sulawesi Utara berhasil mengamankan kontainer berisi barang elektronik impor ilegal di kawasan Pelabuhan Bitung...",
+        content: `
+          <p class="font-bold text-lg text-gray-900">Bitung —</p>
+          <p>Direktorat Reserse Kriminal Khusus (Ditreskrimsus) Polda Sulawesi Utara kembali mengungkap kasus penyelundupan barang konsumsi dan elektronik ilegal dalam jumlah besar melalui Jalur Laut Pelabuhan Bitung.</p>
+          <p>Kapolda Sulut menyampaikan dalam konferensi pers bahwa penindakan ini dilakukan berkat laporan masyarakat dan ketelitian analisis intelijen pelabuhan. Barang bukti yang disita meliputi puluhan unit perangkat elektronik mewah tanpa dokumen kepabeanan sah.</p>
+          <p>Saat ini dua orang tersangka berinisial RL dan AT telah ditahan untuk menjalani pemeriksaan hukum lebih lanjut sesuai UU Kepabeanan dan UU Perdagangan.</p>
+        `,
+        comments: [
+          { name: "Franky L.", text: "Apresiasi kinerja Kapolda Sulut dalam memberantas barang ilegal di Bitung!" }
+        ]
+      },
+      {
+        id: 2,
+        title: "Perkembangan Ekonomi Global: Dinamika Pasar Pasifik Berdampak Pada Komoditas Kelapa Sulut",
+        category: "Internasional",
+        region: "Pasifik",
+        author: "Stephanus V.",
+        date: "27 Okt 2026 • 09:50 WITA",
+        image: "https://images.unsplash.com/photo-1526304640581-d334cdbbf45e?auto=format&fit=crop&w=800&q=80",
+        excerpt: "Perubahan suku bunga dunia dan permintaan tepung kelapa dari Eropa mempengaruhi pergerakan harga komoditas turunan kelapa lokal...",
+        content: `
+          <p class="font-bold text-lg text-gray-900">Jenewa —</p>
+          <p>Pengamat ekonomi internasional menyoroti fluktuasi harga komoditas perkebunan di Asia Tenggara. Sulawesi Utara sebagai salah satu penghasil kelapa terbesar terus berupaya memperluas ekspor langsung ke negara-negara tujuan baru.</p>
+        `,
+        comments: []
+      },
+      {
+        id: 3,
+        title: "Pemerintah Pusat Targetkan Pengoperasian Penuh Jalan Logistik Guna Genjot Distribusi Nasional",
+        category: "Nasional",
+        region: "Jakarta",
+        author: "Budi Santoso",
+        date: "27 Okt 2026 • 09:10 WITA",
+        image: "https://images.unsplash.com/photo-1544620347-c4fd4a3d5957?auto=format&fit=crop&w=800&q=80",
+        excerpt: "Kementerian PUPR mempercepat integrasi jalur kawasan industri nasional guna memangkas waktu pengiriman barang antar wilayah...",
+        content: `
+          <p class="font-bold text-lg text-gray-900">Jakarta —</p>
+          <p>Dalam upaya mempercepat konektivitas logistik nasional di wilayah Indonesia Timur, Pemerintah Pusat kembali menargetkan peningkatan integrasi infrastruktur jalan tol dan pelabuhan.</p>
+        `,
+        comments: []
+      },
+      {
+        id: 4,
+        title: "Info Sulut: DPSP Likupang Sambut Investasi Hijau Baru Untuk Ekowisata Bahari",
+        category: "Info Sulut",
+        region: "Likupang",
+        author: "Fransiscus P.",
+        date: "27 Okt 2026 • 08:30 WITA",
+        image: "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=800&q=80",
+        excerpt: "Kawasan Destinasi Pariwisata Super Prioritas (DPSP) Likupang menerima komitmen investasi ekowisata ramah lingkungan...",
+        content: `
+          <p class="font-bold text-lg text-gray-900">Likupang —</p>
+          <p>Kawasan Destinasi Pariwisata Super Prioritas (DPSP) Likupang, Sulawesi Utara, kembali mencatatkan penambahan investasi bernilai fantastis untuk pengembangan resor ekowisata berbasis energi terbarukan.</p>
+        `,
+        comments: []
+      },
+      {
+        id: 5,
+        title: "Kunjungan Tokoh Publik: Menteri Ketenagakerjaan Tinjau Pusat Pelatihan Kerja Manado",
+        category: "Tokoh Publik",
+        region: "Manado",
+        author: "Siti Rahmawati",
+        date: "27 Okt 2026 • 07:30 WITA",
+        image: "https://images.unsplash.com/photo-1577962917302-cd874c4e31d2?auto=format&fit=crop&w=800&q=80",
+        excerpt: "Tokoh publik nasional menyambangi Kota Manado guna meresmikan program pelatihan vokasi industri digital untuk pemuda Nyiur Melambai...",
+        content: `
+          <p class="font-bold text-lg text-gray-900">Manado —</p>
+          <p>Menteri Ketenagakerjaan RI melakukan kunjungan kerja resmi ke Manado. Beliau menekankan pentingnya peningkatan keterampilan SDM muda Kawanua agar siap bersaing di pasar kerja digital.</p>
+        `,
+        comments: []
+      },
+      {
+        id: 6,
+        title: "Kejari Tomohon Tetapkan Suspek Baru Dalam Kasus Penyalahgunaan Anggaran Sarana Publik",
+        category: "Hukum & Kriminal",
+        region: "Tomohon",
+        author: "Grace Sompie",
+        date: "26 Okt 2026 • 18:00 WITA",
+        image: "https://images.unsplash.com/photo-1589829545856-d10d557cf95f?auto=format&fit=crop&w=800&q=80",
+        excerpt: "Kejaksaan Negeri Tomohon resmi menetapkan oknum terkait dugaan tindak pidana korupsi pengadaan fasilitas publik...",
+        content: `
+          <p class="font-bold text-lg text-gray-900">Tomohon —</p>
+          <p>Kejaksaan Negeri Kota Tomohon menegaskan penegakan hukum akan terus berjalan transparan demi menyelamatkan keuangan daerah.</p>
+        `,
+        comments: []
+      }
+    ];
+
+    let heroData = newsData[0];
+    let activeModalArticleId = null;
+    let savedBookmarks = JSON.parse(localStorage.getItem('weKawanuaBookmarks')) || [];
+
+    document.addEventListener('DOMContentLoaded', () => {
+      renderHero();
+      renderNewsFeed(newsData);
+      renderPopularNews();
+      updateBookmarkBadge();
+    });
+
+    function renderHero() {
+      document.getElementById('heroImage').src = heroData.image;
+      document.getElementById('heroCategory').innerText = `${heroData.category.toUpperCase()} • ${heroData.region.toUpperCase()}`;
+      document.getElementById('heroTitle').innerText = heroData.title;
+      document.getElementById('heroAuthor').innerHTML = `<i class="fa-regular fa-user mr-1"></i> ${heroData.author}`;
+      document.getElementById('heroDate').innerHTML = `<i class="fa-regular fa-clock mr-1"></i> ${heroData.date}`;
+    }
+
+    function renderNewsFeed(data) {
+      const container = document.getElementById('newsContainer');
+      container.innerHTML = '';
+
+      if (data.length === 0) {
+        container.innerHTML = `
+          <div class="text-center py-10 text-gray-500">
+            <i class="fa-solid fa-newspaper text-3xl mb-2 text-gray-400"></i>
+            <p class="text-sm font-medium">Belum ada berita untuk kategori ini.</p>
+          </div>
+        `;
+        return;
+      }
+
+      data.forEach(item => {
+        const isSaved = savedBookmarks.includes(item.id);
+        const card = document.createElement('div');
+        card.className = "flex flex-col sm:flex-row gap-4 border-b border-gray-200 pb-4 hover:bg-gray-50 p-2 rounded-lg transition cursor-pointer group";
+        card.onclick = (e) => {
+          if(!e.target.closest('.bookmark-btn')) openArticleModal(item.id);
+        };
+
+        card.innerHTML = `
+          <div class="w-full sm:w-44 h-32 flex-shrink-0 overflow-hidden rounded-md relative">
+            <img src="${item.image}" alt="${item.title}" class="w-full h-full object-cover group-hover:scale-105 transition duration-300">
+            <span class="absolute top-2 left-2 bg-detikBlue text-white text-[10px] font-bold px-2 py-0.5 rounded shadow">${item.region}</span>
+          </div>
+          <div class="flex-1 flex flex-col justify-between">
+            <div>
+              <div class="flex items-center justify-between text-[11px] text-gray-500 mb-1">
+                <span class="text-detikRed font-bold uppercase tracking-wider">${item.category}</span>
+                <span>${item.date}</span>
+              </div>
+              <h4 class="font-bold text-sm sm:text-base text-gray-900 group-hover:text-detikBlue transition leading-snug line-clamp-2">${item.title}</h4>
+              <p class="text-xs text-gray-600 mt-1 line-clamp-2">${item.excerpt}</p>
+            </div>
+            <div class="flex items-center justify-between mt-3 text-xs text-gray-500">
+              <span class="text-[11px]"><i class="fa-regular fa-user mr-1"></i> ${item.author}</span>
+              <button onclick="toggleBookmark(${item.id})" class="bookmark-btn text-gray-400 hover:text-detikRed transition" title="Simpan Berita">
+                <i class="${isSaved ? 'fa-solid text-detikRed' : 'fa-regular'} fa-bookmark"></i>
+              </button>
+            </div>
+          </div>
+        `;
+        container.appendChild(card);
+      });
+    }
+
+    function renderPopularNews() {
+      const container = document.getElementById('popularNewsContainer');
+      container.innerHTML = '';
+      newsData.slice(0, 5).forEach((item, index) => {
+        const itemEl = document.createElement('div');
+        itemEl.className = "flex items-start gap-3 cursor-pointer group";
+        itemEl.onclick = () => openArticleModal(item.id);
+        itemEl.innerHTML = `
+          <span class="font-brand text-2xl font-black text-detikBlue/30 group-hover:text-detikRed transition w-6 text-center">#${index + 1}</span>
+          <div class="flex-1 border-b border-gray-100 pb-3">
+            <span class="text-[10px] font-bold text-detikRed uppercase">${item.category}</span>
+            <h5 class="text-xs font-bold text-gray-800 group-hover:text-detikBlue transition line-clamp-2 leading-snug">${item.title}</h5>
+          </div>
+        `;
+        container.appendChild(itemEl);
+      });
+    }
+
+    function filterCategory(cat) {
+      const filterStatus = document.getElementById('filterStatus');
+      const filterKeyword = document.getElementById('filterKeyword');
+
+      if (cat === 'all') {
+        filterStatus.classList.add('hidden');
+        renderNewsFeed(newsData);
+      } else {
+        filterKeyword.innerText = cat;
+        filterStatus.classList.remove('hidden');
+        const filtered = newsData.filter(item => 
+          item.category.toLowerCase() === cat.toLowerCase()
+        );
+        renderNewsFeed(filtered);
+      }
+    }
+
+    function handleSearch(e) {
+      if (e.key === 'Enter') executeSearch();
+    }
+
+    function executeSearch() {
+      const query = document.getElementById('searchInput').value.trim().toLowerCase();
+      if (!query) {
+        filterCategory('all');
+        return;
+      }
+      document.getElementById('filterKeyword').innerText = `"${query}"`;
+      document.getElementById('filterStatus').classList.remove('hidden');
+
+      const results = newsData.filter(item => 
+        item.title.toLowerCase().includes(query) || 
+        item.excerpt.toLowerCase().includes(query)
+      );
+      renderNewsFeed(results);
+    }
+
+    function openArticleModal(id) {
+      const article = newsData.find(item => item.id === id);
+      if (!article) return;
+
+      activeModalArticleId = id;
+      document.getElementById('modalCategory').innerText = `${article.category} • ${article.region}`;
+      document.getElementById('modalTitle').innerText = article.title;
+      document.getElementById('modalAuthor').innerText = article.author;
+      document.getElementById('modalDate').innerText = article.date;
+      document.getElementById('modalImage').src = article.image;
+      document.getElementById('modalBody').innerHTML = article.content;
+
+      renderModalComments(article.comments);
+
+      document.getElementById('articleModal').classList.remove('hidden');
+      document.body.style.overflow = 'hidden';
+    }
+
+    function closeArticleModal() {
+      document.getElementById('articleModal').classList.add('hidden');
+      document.body.style.overflow = 'auto';
+    }
+
+    function renderModalComments(comments) {
+      const listContainer = document.getElementById('modalCommentsList');
+      document.getElementById('modalCommentCount').innerText = comments.length;
+      listContainer.innerHTML = '';
+
+      if (comments.length === 0) {
+        listContainer.innerHTML = `<p class="text-xs text-gray-400 italic">Belum ada komentar.</p>`;
+        return;
+      }
+
+      comments.forEach(c => {
+        const div = document.createElement('div');
+        div.className = "bg-gray-50 p-2.5 rounded border border-gray-200 text-xs";
+        div.innerHTML = `
+          <div class="flex items-center justify-between font-bold text-gray-800 mb-1">
+            <span>${c.name}</span>
+            <span class="text-[10px] text-gray-400">Baru saja</span>
+          </div>
+          <p class="text-gray-600">${c.text}</p>
+        `;
+        listContainer.appendChild(div);
+      });
+    }
+
+    function addComment() {
+      const input = document.getElementById('commentInput');
+      const val = input.value.trim();
+      if (!val) return;
+
+      const article = newsData.find(item => item.id === activeModalArticleId);
+      if (article) {
+        article.comments.unshift({ name: "Pembaca Kawanua", text: val });
+        renderModalComments(article.comments);
+        input.value = '';
+        openToast('Komentar berhasil dikirim');
+      }
+    }
+
+    function toggleBookmark(id) {
+      const index = savedBookmarks.indexOf(id);
+      if (index > -1) {
+        savedBookmarks.splice(index, 1);
+        openToast('Berita dihapus dari simpanan');
+      } else {
+        savedBookmarks.push(id);
+        openToast('Berita disimpan');
+      }
+      localStorage.setItem('weKawanuaBookmarks', JSON.stringify(savedBookmarks));
+      updateBookmarkBadge();
+      renderNewsFeed(newsData);
+    }
+
+    function updateBookmarkBadge() {
+      const badge = document.getElementById('bookmarkBadge');
+      if (savedBookmarks.length > 0) {
+        badge.innerText = savedBookmarks.length;
+        badge.classList.remove('hidden');
+      } else {
+        badge.classList.add('hidden');
+      }
+    }
+
+    function openBookmarksModal() {
+      const list = document.getElementById('bookmarksList');
+      list.innerHTML = '';
+
+      if (savedBookmarks.length === 0) {
+        list.innerHTML = `<p class="text-xs text-gray-500 text-center py-6">Belum ada berita tersimpan.</p>`;
+      } else {
+        savedBookmarks.forEach(id => {
+          const item = newsData.find(n => n.id === id);
+          if (item) {
+            const div = document.createElement('div');
+            div.className = "flex items-center justify-between p-2 border border-gray-200 rounded text-xs hover:bg-gray-50";
+            div.innerHTML = `
+              <span class="font-bold text-gray-800 line-clamp-1 flex-1 cursor-pointer" onclick="closeBookmarksModal(); openArticleModal(${item.id})">${item.title}</span>
+              <button onclick="toggleBookmark(${item.id}); openBookmarksModal();" class="text-detikRed ml-2 font-bold text-xs"><i class="fa-solid fa-trash"></i></button>
+            `;
+            list.appendChild(div);
+          }
+        });
+      }
+
+      document.getElementById('bookmarksModal').classList.remove('hidden');
+    }
+
+    function closeBookmarksModal() {
+      document.getElementById('bookmarksModal').classList.add('hidden');
+    }
+
+    function openToast(msg) {
+      const toast = document.getElementById('toast');
+      document.getElementById('toastMsg').innerText = msg;
+      toast.classList.remove('hidden');
+      setTimeout(() => { toast.classList.add('hidden'); }, 3000);
+    }
+  </script>
+</body>
+</html>
